@@ -28,7 +28,9 @@ object MovieLensInsights{
         val tagsDF = readCSV("ml-latest-small/tags.csv", true, true)
         
         val cleanMoviesDF = DataCleaner.cleanMoviesDF(moviesDF)
-        cleanMoviesDF.show(10)
+        val cleanRatingsDF = DataCleaner.cleanRatingsDF(ratingsDF)
+        val cleanTagsDF = DataCleaner.cleanTagsDF(tagsDF)
+        
         
     }
 }

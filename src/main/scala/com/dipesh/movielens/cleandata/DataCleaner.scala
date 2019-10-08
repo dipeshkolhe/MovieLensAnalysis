@@ -4,7 +4,8 @@ import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.Column
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.functions.udf
-import org.apache.spark.sql.functions.{explode, split}
+import org.apache.spark.sql.functions.{explode, split, to_date, from_unixtime}
+import org.apache.spark.sql.types.StringType
 
 object DataCleaner {
   def cleanMoviesDF(movieDF: DataFrame)(implicit spark: SparkSession): DataFrame = {
@@ -32,4 +33,16 @@ object DataCleaner {
     else
       releaseYear
   }
+  
+  def cleanRatingsDF(ratingsDF: DataFrame)(implicit spark: SparkSession): DataFrame = {
+    import spark.implicits._
+    //ratingsDF.withColumn("datetime", to_date('timestamp.cast(StringType), "yyyy-MM-dd HH:mm:ss"))
+    ratingsDF.withColumn("datetime", from_unixtime('timestamp, "yyyy-MM-dd HH:mm:ss"))
+  }
+  
+  def cleanTagsDF(tagsDF: DataFrame)(implicit spark: SparkSession): DataFrame = {
+    import spark.implicits._
+    tagsDF.withColumn("datetime", from_unixtime('timestamp, "yyyy-MM-dd HH:mm:ss"))
+  }
+  
 }
