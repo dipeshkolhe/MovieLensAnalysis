@@ -5,12 +5,13 @@ import org.slf4j.LoggerFactory
 
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.DataFrame
+import com.dipesh.movielens.cleandata.DataCleaner
 
 object MovieLensInsights{
 
     val logger = LoggerFactory.getLogger("MovieLensInsights")
 
-    def readCSV(spark: SparkSession, path: String, header: Boolean, inferSchema: Boolean): DataFrame = {
+    def readCSV(path: String, header: Boolean, inferSchema: Boolean)(implicit spark: SparkSession): DataFrame = {
         spark.read
             .format("csv")
             .option("header", header.toString)
@@ -19,13 +20,15 @@ object MovieLensInsights{
     }
 
     def main(args: Array[String]): Unit = {
-        val spark = SparkSession.builder.appName("MovieLensInsights").master("local").getOrCreate
+        implicit val spark = SparkSession.builder.appName("MovieLensInsights").master("local").getOrCreate
         
-        val moviesDF = readCSV(spark, "ml-latest-small/movies.csv", true, true)
-        val linksDF = readCSV(spark, "ml-latest-small/links.csv", true, true)
-        val ratingsDF = readCSV(spark, "ml-latest-small/ratings.csv", true, true)
-        val tagsDF = readCSV(spark, "ml-latest-small/tags.csv", true, true)
-
+        val moviesDF = readCSV("ml-latest-small/movies.csv", true, true)
+        val linksDF = readCSV("ml-latest-small/links.csv", true, true)
+        val ratingsDF = readCSV("ml-latest-small/ratings.csv", true, true)
+        val tagsDF = readCSV("ml-latest-small/tags.csv", true, true)
+        
+        val cleanMoviesDF = DataCleaner.cleanMoviesDF(moviesDF)
+        cleanMoviesDF.show(10)
         
     }
 }
