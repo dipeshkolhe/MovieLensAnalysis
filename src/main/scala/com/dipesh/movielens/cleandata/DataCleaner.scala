@@ -8,14 +8,18 @@ import org.apache.spark.sql.functions.{explode, split, to_date, from_unixtime}
 import org.apache.spark.sql.types.StringType
 
 object DataCleaner {
-  def cleanMoviesDF(movieDF: DataFrame)(implicit spark: SparkSession): DataFrame = {
+  def cleanMoviesDF(movieDF: DataFrame)(implicit spark: SparkSession): (DataFrame, DataFrame) = {
     import spark.implicits._
     val extractYearUDF = udf(extractYear _)
     val removeReleaseYearUDF = udf(removeReleaseYear _)
-    movieDF.withColumn("releaseYear", extractYearUDF('title))
+    val moviesDFWithReleaseYear = movieDF.withColumn("releaseYear", extractYearUDF('title))
       .withColumn("title", removeReleaseYearUDF('title))
+      
+    val moviesDFWithReleaseYearAndGenreExploded = moviesDFWithReleaseYear
       .withColumn("genre", explode(split('genres, "\\|")))
       .drop('genres)
+      
+    (moviesDFWithReleaseYear, moviesDFWithReleaseYearAndGenreExploded)
   }
   
   def removeReleaseYear(title: String): String = {

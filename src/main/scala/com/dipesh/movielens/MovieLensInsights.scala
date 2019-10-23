@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.DataFrame
 import com.dipesh.movielens.cleandata.DataCleaner
+import com.dipesh.movielens.exploration.InsightsExplorer
 
 object MovieLensInsights{
 
@@ -23,14 +24,14 @@ object MovieLensInsights{
         implicit val spark = SparkSession.builder.appName("MovieLensInsights").master("local").getOrCreate
         
         val moviesDF = readCSV("ml-latest-small/movies.csv", true, true)
-        val linksDF = readCSV("ml-latest-small/links.csv", true, true)
         val ratingsDF = readCSV("ml-latest-small/ratings.csv", true, true)
         val tagsDF = readCSV("ml-latest-small/tags.csv", true, true)
         
-        val cleanMoviesDF = DataCleaner.cleanMoviesDF(moviesDF)
+        val (cleanMoviesDF, cleanMoviesWithGenreExploded) = DataCleaner.cleanMoviesDF(moviesDF)
         val cleanRatingsDF = DataCleaner.cleanRatingsDF(ratingsDF)
         val cleanTagsDF = DataCleaner.cleanTagsDF(tagsDF)
         
+        InsightsExplorer.exploreInsights(cleanMoviesDF, cleanMoviesWithGenreExploded, cleanRatingsDF, cleanTagsDF)
         
     }
 }

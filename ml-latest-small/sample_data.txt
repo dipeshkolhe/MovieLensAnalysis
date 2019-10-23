@@ -1,0 +1,142 @@
+======
+movies
+======
+
+Original data
+-------------
+
+movieId,title,genres
+1,Toy Story (1995),Adventure|Animation|Children|Comedy|Fantasy
+2,Jumanji (1995),Adventure|Children|Fantasy
+3,Grumpier Old Men (1995),Comedy|Romance
+4,Waiting to Exhale (1995),Comedy|Drama|Romance
+5,Father of the Bride Part II (1995),Comedy
+6,Heat (1995),Action|Crime|Thriller
+7,Sabrina (1995),Comedy|Romance
+8,Tom and Huck (1995),Adventure|Children
+9,Sudden Death (1995),Action
+10,GoldenEye (1995),Action|Adventure|Thriller
+
+Data after cleanup
+------------------
+
+Following is release year extracted into new column from title
+
++-------+--------------------+--------------------+-----------+
+|movieId|               title|              genres|releaseYear|
++-------+--------------------+--------------------+-----------+
+|      1|           Toy Story|Adventure|Animati...|       1995|
+|      2|             Jumanji|Adventure|Childre...|       1995|
+|      3|    Grumpier Old Men|      Comedy|Romance|       1995|
+|      4|   Waiting to Exhale|Comedy|Drama|Romance|       1995|
+|      5|Father of the Bri...|              Comedy|       1995|
++-------+--------------------+--------------------+-----------+
+
+Following is same with genre column exploded:
+
++-------+--------------------+-----------+---------+
+|movieId|               title|releaseYear|    genre|
++-------+--------------------+-----------+---------+
+|      1|           Toy Story|       1995|Adventure|
+|      1|           Toy Story|       1995|Animation|
+|      1|           Toy Story|       1995| Children|
+|      1|           Toy Story|       1995|   Comedy|
+|      1|           Toy Story|       1995|  Fantasy|
+|      2|             Jumanji|       1995|Adventure|
+|      2|             Jumanji|       1995| Children|
+|      2|             Jumanji|       1995|  Fantasy|
+|      3|    Grumpier Old Men|       1995|   Comedy|
+|      3|    Grumpier Old Men|       1995|  Romance|
+|      4|   Waiting to Exhale|       1995|   Comedy|
+|      4|   Waiting to Exhale|       1995|    Drama|
+|      4|   Waiting to Exhale|       1995|  Romance|
+|      5|Father of the Bri...|       1995|   Comedy|
+|      6|                Heat|       1995|   Action|
+|      6|                Heat|       1995|    Crime|
+|      6|                Heat|       1995| Thriller|
+|      7|             Sabrina|       1995|   Comedy|
+|      7|             Sabrina|       1995|  Romance|
+|      8|        Tom and Huck|       1995|Adventure|
+|      8|        Tom and Huck|       1995| Children|
+|      9|        Sudden Death|       1995|   Action|
+|     10|           GoldenEye|       1995|   Action|
+|     10|           GoldenEye|       1995|Adventure|
+|     10|           GoldenEye|       1995| Thriller|
++-------+--------------------+-----------+---------+
+
+=======
+ratings
+=======
+
+Original data
+-------------
+
+userId,movieId,rating,timestamp
+1,1,4.0,964982703
+1,3,4.0,964981247
+1,6,4.0,964982224
+1,47,5.0,964983815
+1,50,5.0,964982931
+1,70,3.0,964982400
+1,101,5.0,964980868
+1,110,4.0,964982176
+1,151,5.0,964984041
+1,157,5.0,964984100
+1,163,5.0,964983650
+
+
+Data after cleanup
+------------------
+
++------+-------+------+---------+-------------------+
+|userId|movieId|rating|timestamp|           datetime|
++------+-------+------+---------+-------------------+
+|     1|      1|   4.0|964982703|2000-07-31 00:15:03|
+|     1|      3|   4.0|964981247|2000-07-30 23:50:47|
+|     1|      6|   4.0|964982224|2000-07-31 00:07:04|
+|     1|     47|   5.0|964983815|2000-07-31 00:33:35|
+|     1|     50|   5.0|964982931|2000-07-31 00:18:51|
+|     1|     70|   3.0|964982400|2000-07-31 00:10:00|
+|     1|    101|   5.0|964980868|2000-07-30 23:44:28|
+|     1|    110|   4.0|964982176|2000-07-31 00:06:16|
+|     1|    151|   5.0|964984041|2000-07-31 00:37:21|
+|     1|    157|   5.0|964984100|2000-07-31 00:38:20|
++------+-------+------+---------+-------------------+
+
+====
+tags
+====
+
+Original data
+-------------
+
+userId,movieId,tag,timestamp
+2,60756,funny,1445714994
+2,60756,Highly quotable,1445714996
+2,60756,will ferrell,1445714992
+2,89774,Boxing story,1445715207
+2,89774,MMA,1445715200
+2,89774,Tom Hardy,1445715205
+2,106782,drugs,1445715054
+2,106782,Leonardo DiCaprio,1445715051
+2,106782,Martin Scorsese,1445715056
+7,48516,way too long,1169687325
+18,431,Al Pacino,1462138765
+
+Data after cleanup
+------------------
+
++------+-------+-----------------+----------+-------------------+
+|userId|movieId|              tag| timestamp|           datetime|
++------+-------+-----------------+----------+-------------------+
+|     2|  60756|            funny|1445714994|2015-10-25 00:59:54|
+|     2|  60756|  Highly quotable|1445714996|2015-10-25 00:59:56|
+|     2|  60756|     will ferrell|1445714992|2015-10-25 00:59:52|
+|     2|  89774|     Boxing story|1445715207|2015-10-25 01:03:27|
+|     2|  89774|              MMA|1445715200|2015-10-25 01:03:20|
+|     2|  89774|        Tom Hardy|1445715205|2015-10-25 01:03:25|
+|     2| 106782|            drugs|1445715054|2015-10-25 01:00:54|
+|     2| 106782|Leonardo DiCaprio|1445715051|2015-10-25 01:00:51|
+|     2| 106782|  Martin Scorsese|1445715056|2015-10-25 01:00:56|
+|     7|  48516|     way too long|1169687325|2007-01-25 06:38:45|
++------+-------+-----------------+----------+-------------------+
